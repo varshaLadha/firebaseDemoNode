@@ -152,9 +152,24 @@ router.post('/login', (req, res, next) => {
     });
 })
 
+router.get('/teachers', (req, res, next) => {
+    db.collection("Teacher").get().then((data) => {
+        var teacherData = []
+        data.forEach(doc => {
+            teacherData.push(doc.data())
+        });
+
+        res.send(teacherData)
+    }).catch((error) => {
+        res.send(error)
+    })
+})
+
 router.post('/assignTeacher', (req, res, next) => {
 
-    db.collection("Teacher").where("division_id", '==', req.body.division_id).where("standard_id", '==', req.body.standard_id).get()
+    db.collection("Teacher").
+    where("division_id", '==', req.body.division_id).
+    where("standard_id", '==', req.body.standard_id).get()
         .then((userDetail) => {
 
         if(userDetail.size > 0){
@@ -181,6 +196,8 @@ router.post('/assignTeacher', (req, res, next) => {
 
             })
         }
+    }).catch((error) => {
+       res.send(error)
     })
 })
 
