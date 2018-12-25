@@ -1,0 +1,70 @@
+{
+  "swagger": "2.0" ,
+  "info": {
+    "version": "1.0.0" ,
+    "title": "Buddy App" ,
+    "description": "Buddy Swagger" ,
+    "license": {
+      "name": "MIT" ,
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  } ,
+  "host": "192.168.200.34:3000" ,
+  "tags": [
+    {
+      "name": "User" ,
+      "description": "API for Users of the system"
+    }
+  ] ,
+  "schemes": [
+    "http"
+  ] ,
+  "consumes": [
+    "application/json"
+  ] ,
+  "produces": [
+    "application/json"
+  ] ,
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "security":[
+    {
+      "api_key":[]
+    }
+  ],
+  "paths": {
+    "/user/fileUpload":{
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "File upload ",
+        "description": "Testing file upload in swagger",
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file to be uploaded",
+            "type": "file"
+          }
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "responses" :{
+          "201": {
+            "description": "File uploaded successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    }
+  }
+}
