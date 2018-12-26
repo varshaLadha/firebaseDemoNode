@@ -3,6 +3,7 @@ const router = Router();
 const jwt = require('jsonwebtoken');
 const {jwtConfig} = require('../config/general')
 const format = require('util').format
+const {verifiedToken} = require('../middleware/verifyToken')
 
 const Multer = require('multer');
 
@@ -201,7 +202,7 @@ router.post('/assignTeacher', (req, res, next) => {
     })
 })
 
-router.post('/fileUpload',multer.single('file'), (req, res, next) => {
+router.post('/fileUpload',verifiedToken,multer.single('file'), (req, res, next) => {
 
     let file = req.file;
     if (file) {
