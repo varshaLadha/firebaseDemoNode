@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   } ,
-  "host": "192.168.200.34:3000" ,
+  "host": "localhost:3000" ,
   "tags": [
     {
       "name": "User" ,
@@ -63,6 +63,132 @@
               "$ref": "#/definitions/User"
             }
           }
+        }
+      }
+    },
+    "/user/register": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "New user registration",
+        "description": "Registering a new user to the system",
+        "parameters" :[
+          {
+            "name": "user data",
+            "in": "body",
+            "description": "body of user registration data",
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "schema": {
+              "$ref": "#/responses/userRegistration"
+            }
+          }
+        }
+      }
+    },
+    "/user/login": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "User login route",
+        "description": "Login route for user",
+        "parameters": [
+          {
+            "name": "login data",
+            "in": "body",
+            "description": "Login information",
+            "schema" :{
+              "$ref": "#/definitions/userLogin"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses" :{
+          "201": {
+            "description" :"User logged in successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "UserRegistration": {
+      "required": [
+        "email",
+        "password",
+        "role",
+        "name",
+        "address",
+        "mobile_no"
+      ],
+      "properties": {
+        "email": {
+          "type": "string",
+          "pattern": "^(([^<>()\\[\\]\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "mobile_no": {
+          "type": "string"
+        }
+      }
+    },
+    "userLogin": {
+      "required": [
+        "email",
+        "password"
+      ],
+      "properties" :{
+        "email":{
+          "type": "string"
+        },
+        "password":{
+          "type": "string"
+        }
+      }
+    }
+  },
+  "responses": {
+    "userRegistration": {
+      "type": "object",
+      "properties":{
+        "success": {
+          "type": "integer"
+        },
+        "response": {
+          "type": "string"
         }
       }
     }

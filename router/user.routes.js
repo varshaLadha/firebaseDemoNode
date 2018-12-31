@@ -83,6 +83,61 @@ router.post('/login', (req, res, next) => {
     var password = req.body.password;
 
     firebase.auth().signInWithEmailAndPassword(email, password).then((data) => {
+        if(data){
+            var Users = db.collection("User")
+
+            Users.where("email", "==", email).
+            onSnapshot((data) => {
+                var userData = ''
+                data.forEach(function (userSnapshot) {
+                    id = userSnapshot.id
+
+                    db.collection("Teacher").where("userId", '==', id).onSnapshot((userDetail) => {
+                        userDetail.forEach((detail) => {
+                            JWTToken = jwt.sign({
+                                    email: userSnapshot.data().email,
+                                    _id: detail.data().userId,
+                                    user_id: detail.id,
+                                    role:userSnapshot.data().role
+                                },
+                                jwtConfig.secret
+                            );
+
+                            userData = {
+                                id: detail.id,
+                                name:detail.data().name,
+                                email:userSnapshot.data().email,
+                                address: detail.data().address,
+                                mobile_no: detail.data().mobile_no,
+                                role: userSnapshot.data().role,
+                                userId: detail.data().userId,
+                                standard_id: detail.data().standard_id,
+                                division_id: detail.data().division_id
+                            }
+                        })
+
+                        if(userData === ""){
+                            userData = {
+                                id: userSnapshot.id,
+                                displayName:userSnapshot.data().displayName,
+                                email:userSnapshot.data().email
+                            }
+                            res.json({success: 1, userData, token : JWTToken})
+                        }else {
+                            res.json({success: 1, userData, token : JWTToken})
+                        }
+                    })
+                });
+            })
+
+            /*db.collection("Users").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(`${doc.id} => ${doc.data()}`);
+                });
+            });*/
+        }else {
+            res.json({success: 0, response: "Invalid credentials"})
+        }
 
         /*ref.orderByChild('email').equalTo(email).once('value').
         then((userData) => {
@@ -93,58 +148,6 @@ router.post('/login', (req, res, next) => {
         }).catch((err) => {
             res.send(err)
         })*/
-
-        var Users = db.collection("User")
-
-        Users.where("email", "==", email).
-        onSnapshot((data) => {
-            var userData = ''
-            data.forEach(function (userSnapshot) {
-                id = userSnapshot.id
-
-                db.collection("Teacher").where("userId", '==', id).onSnapshot((userDetail) => {
-                    userDetail.forEach((detail) => {
-                        JWTToken = jwt.sign({
-                                email: userSnapshot.data().email,
-                                _id: detail.data().userId,
-                                user_id: detail.id,
-                                role:userSnapshot.data().role
-                            },
-                            jwtConfig.secret
-                        );
-
-                        userData = {
-                            id: detail.id,
-                            name:detail.data().name,
-                            email:userSnapshot.data().email,
-                            address: detail.data().address,
-                            mobile_no: detail.data().mobile_no,
-                            role: userSnapshot.data().role,
-                            userId: detail.data().userId,
-                            standard_id: detail.data().standard_id,
-                            division_id: detail.data().division_id
-                        }
-                    })
-
-                    if(userData === ""){
-                        userData = {
-                            id: userSnapshot.id,
-                            displayName:userSnapshot.data().displayName,
-                            email:userSnapshot.data().email
-                        }
-                        res.json({success: 1, userData, token : JWTToken})
-                    }else {
-                        res.json({success: 1, userData, token : JWTToken})
-                    }
-                })
-            });
-        })
-
-        /*db.collection("Users").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                console.log(`${doc.id} => ${doc.data()}`);
-            });
-        });*/
     }).catch(function(error) {
         var errorCode = error.code;
         var errorMessage = error.message;
