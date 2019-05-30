@@ -1,30 +1,30 @@
 {
-  "swagger": "2.0" ,
+  "swagger": "2.0",
   "info": {
-    "version": "1.0.0" ,
-    "title": "Buddy App" ,
-    "description": "Buddy Swagger" ,
+    "version": "1.0.0",
+    "title": "Buddy App",
+    "description": "Buddy Swagger",
     "license": {
-      "name": "MIT" ,
+      "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
-  } ,
-  "host": "localhost:3000" ,
+  },
+  "host": "localhost:3000",
   "tags": [
     {
-      "name": "User" ,
+      "name": "User",
       "description": "API for Users of the system"
     }
-  ] ,
+  ],
   "schemes": [
     "http"
-  ] ,
+  ],
   "consumes": [
     "application/json"
-  ] ,
+  ],
   "produces": [
     "application/json"
-  ] ,
+  ],
   "securityDefinitions": {
     "api_key": {
       "type": "apiKey",
@@ -32,13 +32,13 @@
       "in": "header"
     }
   },
-  "security":[
+  "security": [
     {
-      "api_key":[]
+      "api_key": []
     }
   ],
   "paths": {
-    "/user/fileUpload":{
+    "/user/fileUpload": {
       "post": {
         "tags": [
           "User"
@@ -56,7 +56,7 @@
         "consumes": [
           "multipart/form-data"
         ],
-        "responses" :{
+        "responses": {
           "201": {
             "description": "File uploaded successfully",
             "schema": {
@@ -73,7 +73,7 @@
         ],
         "summary": "New user registration",
         "description": "Registering a new user to the system",
-        "parameters" :[
+        "parameters": [
           {
             "name": "user data",
             "in": "body",
@@ -111,7 +111,7 @@
             "name": "login data",
             "in": "body",
             "description": "Login information",
-            "schema" :{
+            "schema": {
               "$ref": "#/definitions/userLogin"
             }
           }
@@ -122,12 +122,80 @@
         "produces": [
           "application/json"
         ],
-        "responses" :{
+        "responses": {
           "201": {
-            "description" :"User logged in successfully",
+            "description": "User logged in successfully",
             "schema": {
               "$ref": "#/definitions/User"
             }
+          }
+        }
+      }
+    },
+    "/user/get/data": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get user detail based on id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Id fetched"
+          }
+        }
+      }
+    },
+    "/user/teachers": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "description": "Get all the registered teachers",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Teachers fetched"
+          }
+        }
+      }
+    },
+    "/user/assignTeacher": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Assign class",
+        "description": "Assigning class to teacher",
+        "parameters": [
+          {
+            "name": "standard_id",
+            "in": "body",
+            "description": "standard id",
+            "schema": {
+              "$ref": "#/definitions/TeacherAssignData"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Teacher assigned successfully"
           }
         }
       }
@@ -170,11 +238,25 @@
         "email",
         "password"
       ],
-      "properties" :{
-        "email":{
+      "properties": {
+        "email": {
           "type": "string"
         },
-        "password":{
+        "password": {
+          "type": "string"
+        }
+      }
+    },
+    "TeacherAssignData": {
+      "required": [
+        "standard_id",
+        "division_id"
+      ],
+      "properties": {
+        "standard_id": {
+          "type": "string"
+        },
+        "division_id": {
           "type": "string"
         }
       }
@@ -183,7 +265,7 @@
   "responses": {
     "userRegistration": {
       "type": "object",
-      "properties":{
+      "properties": {
         "success": {
           "type": "integer"
         },

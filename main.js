@@ -18,8 +18,8 @@ app.use('/user', userRoute);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(3000, (err, res) => {
-    if(err){
-        console.log("Error occurred "+err.toString());
+    if (err) {
+        console.log("Error occurred " + err.toString());
     } else {
         console.log("Server is listening on port 3000")
     }

@@ -17,7 +17,7 @@ db.settings({
     timestampsInSnapshots: true
 });
 
-var route=router();
+var route = router();
 route.use(bodyParser.json());
 route.use(bodyParser.urlencoded({extended: false}));
 
@@ -30,13 +30,12 @@ route.post('/register', (req, res, next) => {
         email,
         password
     )
-        .then(function(userRecord)
-        {
+        .then(function (userRecord) {
             db.collection("Users").add({
                 email: req.body.email,
                 displayName: req.body.username
             }).then((user) => {
-                if(user){
+                if (user) {
                     id = user.id
 
                     db.collection("UserDetails").add({
@@ -46,25 +45,24 @@ route.post('/register', (req, res, next) => {
                         profession: req.body.profession
                     }).then((detail) => {
                         res.statusCode = 201
-                        res.json({success: 1, response :"User created successfully"})
+                        res.json({success: 1, response: "User created successfully"})
                     }).catch((err) => {
                         res.statusCode = 400
-                        res.json({success: 0, error :error})
+                        res.json({success: 0, error: error})
                     })
                     //res.json({user: user.toString()})
-                }else {
+                } else {
                     res.statusCode = 400
-                    res.json({success: 0, message :"Problem creating user"})
+                    res.json({success: 0, message: "Problem creating user"})
                 }
             }).catch((error) => {
                 res.statusCode = 400
-                res.json({success: 0, error :error})
+                res.json({success: 0, error: error})
             })
         })
-        .catch(function(error)
-        {
+        .catch(function (error) {
             res.statusCode = 400
-            res.json({success: 0, error :error})
+            res.json({success: 0, error: error})
         });
 });
 
@@ -86,8 +84,7 @@ route.post('/login', (req, res, next) => {
 
         var Users = db.collection("Users")
 
-        Users.where("email", "==", email).
-        onSnapshot((data) => {
+        Users.where("email", "==", email).onSnapshot((data) => {
             var userData = ''
             data.forEach(function (userSnapshot) {
                 id = userSnapshot.id
@@ -97,8 +94,8 @@ route.post('/login', (req, res, next) => {
                         //userData = {id: detail.id, data:userSnapshot.data(), detail: detail.data()}
                         userData = {
                             id: detail.id,
-                            displayName:userSnapshot.data().displayName,
-                            email:userSnapshot.data().email,
+                            displayName: userSnapshot.data().displayName,
+                            email: userSnapshot.data().email,
                             address: detail.data().address,
                             phoneNo: detail.data().phoneNo,
                             profession: detail.data().profession,
@@ -106,14 +103,14 @@ route.post('/login', (req, res, next) => {
                         }
                     })
 
-                    if(userData === ""){
+                    if (userData === "") {
                         userData = {
                             id: userSnapshot.id,
-                            displayName:userSnapshot.data().displayName,
-                            email:userSnapshot.data().email
+                            displayName: userSnapshot.data().displayName,
+                            email: userSnapshot.data().email
                         }
                         res.send(userData)
-                    }else {
+                    } else {
                         res.send(userData)
                     }
                 })
@@ -125,17 +122,17 @@ route.post('/login', (req, res, next) => {
                 console.log(`${doc.id} => ${doc.data()}`);
             });
         });*/
-    }).catch(function(error) {
+    }).catch(function (error) {
         var errorCode = error.code;
         var errorMessage = error.message;
 
-        res.json({success:0, error: errorMessage})
+        res.json({success: 0, error: errorMessage})
     });
 })
 
 route.listen(3000, (err, res) => {
-    if(err){
-        console.log("Error occurred "+err.toString());
+    if (err) {
+        console.log("Error occurred " + err.toString());
     } else {
         console.log("Server is listening on port 3000")
     }
