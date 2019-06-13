@@ -1,4 +1,4 @@
 exports.jwtConfig = {
-    expireTime : '2h',
-    secret : 'firebase'
+    expireTime: '2h',
+    secret: 'firebase'
 }
